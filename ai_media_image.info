@@ -1,0 +1,8 @@
+name = AI Media Image
+description = Interactive AI text-to-image generator saving directly into the site's File and Media library.
+backdrop = 1.x
+type = module
+php = 8.0
+package = AI
+dependencies[] = ai
+dependencies[] = file

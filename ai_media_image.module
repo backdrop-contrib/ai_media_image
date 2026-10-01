@@ -1,0 +1,68 @@
+<?php
+
+/**
+ * @file
+ * AI Media Image module for Backdrop CMS.
+ *
+ * Provides on-demand text-to-image generation directly into Backdrop's
+ * File and Media library.
+ */
+
+/**
+ * Implements hook_permission().
+ */
+function ai_media_image_permission() {
+  return [
+    'generate ai media images' => [
+      'title' => t('Generate AI Media Images'),
+      'description' => t('Create images using AI text-to-image models and save them to the media library.'),
+    ],
+  ];
+}
+
+/**
+ * Implements hook_menu().
+ */
+function ai_media_image_menu() {
+  $items = [];
+
+  $items['admin/content/files/ai-image'] = [
+    'title' => 'Generate AI Image',
+    'page callback' => 'backdrop_get_form',
+    'page arguments' => ['ai_media_image_generate_form'],
+    'access arguments' => ['generate ai media images'],
+    'file' => 'ai_media_image.admin.inc',
+    'type' => MENU_LOCAL_ACTION,
+    'weight' => 10,
+  ];
+
+  $items['file/add/ai-image'] = [
+    'title' => 'Generate AI image',
+    'page callback' => 'backdrop_get_form',
+    'page arguments' => ['ai_media_image_generate_form'],
+    'access arguments' => ['generate ai media images'],
+    'file' => 'ai_media_image.admin.inc',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 5,
+  ];
+
+  return $items;
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function ai_media_image_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  // Add action link for 'admin/content/files/ai-image' on file listing pages.
+  if ($root_path === 'admin/content/files') {
+    if (user_access('generate ai media images')) {
+      $item = menu_get_item('admin/content/files/ai-image');
+      if (!empty($item['access'])) {
+        $data['actions']['output'][] = [
+          '#theme' => 'menu_local_action',
+          '#link' => $item,
+        ];
+      }
+    }
+  }
+}
