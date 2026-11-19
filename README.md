@@ -1,49 +1,17 @@
 # AI Media Image
 
-Generate images from a text prompt with any image-capable AI provider and save
-them straight into the Backdrop file library.
+Generate an image from a text prompt and save it directly in Backdrop’s file library. Choose the shape and model before generating.
 
-## What it does
+## Requirements
 
-- Adds a **Generate AI Image** action to the file listing at
-  `admin/content/files` (form at `admin/content/files/ai-image`), and a
-  **Generate AI image** tab at `file/add/ai-image`.
-- Lets the user write a prompt and choose the model, a shape and an optional
-  filename. When `ai_alt` is enabled, alt text can be generated for the new
-  image and stored in the file's alt field.
-- Offers every model any enabled provider reports as image-capable (OpenAI,
-  Azure, Google Gemini, OpenRouter, ...), defaulting to the site's default
-  image model. Nothing is hardcoded to one provider.
-- Saves the result as a permanent managed file under
-  `{default scheme}://ai-media-images/` (public, S3, ...) and logs the
-  generation to watchdog.
-
-## Provider-neutral options
-
-Image APIs disagree on dimensions: OpenAI accepts a few fixed pixel sizes per
-model, while Gemini and OpenRouter take aspect ratios. The form therefore
-offers shapes (1:1, 3:2, 2:3, 16:9, 9:16) and each provider adapter maps the
-shape to the closest size or ratio its API supports, using `AIImageHelper` in
-the `ai` module. Provider-specific options such as DALL-E 3's quality and style
-are not offered.
-
-Responses are read with `AIImageHelper::extract()`, which handles base64,
-remote HTTPS URLs and `data:` URLs, and only accepts real JPEG, PNG or WebP
-data. The file extension comes from the detected image type; a custom filename
-only supplies the base name.
-
-## Permissions
-
-- **Generate AI Media Images** (`generate ai media images`) — required for the
-  form and the action link.
+Backdrop CMS 1.x, PHP 8.2 or later, and AI and File. Configure a provider with an image generation model.
 
 ## Installation
 
-- Install this module using the official [Backdrop CMS instructions](https://backdropcms.org/user-guide/modules).
-- Requires the `ai` and `file` modules, and at least one provider with an
-  image generation model configured at `admin/config/ai/settings`.
-- Grant the **Generate AI Media Images** permission to the roles that should
-  use it.
+1. Install and enable the module using the official [Backdrop CMS instructions](https://backdropcms.org/user-guide/modules).
+2. Grant **Generate AI Media Images**, then open **Generate AI Image** from the file library.
+
+See the [module wiki](https://github.com/backdrop-contrib/ai_media_image/wiki) for setup, use, and troubleshooting.
 
 ## Issues
 
